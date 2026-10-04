@@ -1,0 +1,25 @@
+/**
+ * 김서림(포그) 레이어 전용 스타일
+ * 기본 레이아웃과 분리해 두었습니다.
+ */
+
+.fog-layer {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.fog-canvas {
+  touch-action: none;
+  pointer-events: none;
+}
+
+.wipe-tool {
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+}
+
+.wipe-tool:active {
+  cursor: grabbing;
+}

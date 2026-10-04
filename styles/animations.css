@@ -1,0 +1,49 @@
+/**
+ * 애니메이션 전용 스타일
+ * 레이아웃과 분리해 두어 나중에 빼기/수정하기 쉽게 합니다.
+ */
+
+/* 상품 퀵뷰 팝업 */
+.quickview-popup {
+  opacity: 0;
+  transform: translate3d(0, 10px, 0) scale(0.98);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease,
+    left 0.22s ease-out,
+    top 0.22s ease-out;
+  will-change: opacity, transform, left, top;
+}
+
+.quickview-popup.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.quickview-popup.is-leaving {
+  opacity: 0;
+  transform: translate3d(0, 6px, 0) scale(0.99);
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s ease,
+    left 0.22s ease-out,
+    top 0.22s ease-out;
+}
+
+.quickview-body {
+  transition: opacity 0.22s ease;
+}
+
+.quickview-body.is-switching {
+  opacity: 0.35;
+}
+
+/* 샵: 카테고리 메뉴 열릴 때 상품이 옆으로만 밀림 (아래로 안 내려감) */
+.shop-products {
+  transition: transform 0.35s ease;
+  will-change: transform;
+}
+
+.shop-products.is-shifted {
+  transform: translateX(var(--shop-menu-shift));
+}

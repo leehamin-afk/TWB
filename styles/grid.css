@@ -1,0 +1,39 @@
+/**
+ * 12컬럼 페이지 그리드
+ * 여백/거터 값은 app/globals.css 토큰을 사용합니다. (px)
+ *
+ * - 좌우 마진: --spacing-page-x (20px)
+ * - 상하 마진: --spacing-page-y (30px)
+ * - gutter: --spacing-gutter (20px)
+ * - 컬럼: --grid-columns (12)
+ * - 기준 프레임: --frame-width × --frame-height (1728 × 1117)
+ */
+
+.page-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+  column-gap: var(--spacing-gutter);
+  row-gap: var(--spacing-gutter);
+  padding-left: var(--spacing-page-x);
+  padding-right: var(--spacing-page-x);
+  padding-top: var(--spacing-page-y);
+  padding-bottom: var(--spacing-page-y);
+  width: 100%;
+  max-width: var(--frame-width, 1728px);
+  min-height: var(--frame-height, 1117px);
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+/* 서브페이지: 프레임 높이에 맞춤 */
+.page-grid--shop {
+  min-height: 0;
+  height: 100%;
+}
+
+/* 상세: 상단은 다른 페이지와 동일(30), 좌우·하단 20 */
+.page-grid--detail {
+  padding-top: var(--spacing-page-y);
+  padding-bottom: var(--spacing-page-x);
+}

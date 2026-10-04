@@ -1,0 +1,188 @@
+@import "tailwindcss";
+@import "../styles/animations.css";
+@import "../styles/fog.css";
+@import "../styles/grid.css";
+
+/**
+ * ============================================
+ * 디자인 토큰 — px (Figma / 맥북 16인치 기준)
+ * ============================================
+ * Figma Inspect 숫자는 px 입니다.
+ * (이전에 pt로 넣으면 화면에서 약 1.33배 더 크게 보였습니다.)
+ *
+ * 그리드: 좌우 20 / 상하 30 / gutter 20 / 12컬럼
+ * 기준 프레임: 1728 × 1117 (맥북 16인치 Figma)
+ */
+@theme {
+  /* ---------- 색상 ---------- */
+  --color-brand: #000000;
+  --color-accent: #4b8fd4;
+  /* 상세 페이지 파란 바탕 (Figma) */
+  --color-detail-bg: #005fc8;
+  --color-background: #ffffff;
+  --color-foreground: #000000;
+  --color-muted: #c8c8c8;
+  --color-on-accent: #ffffff;
+
+  /* ---------- 폰트 패밀리 ---------- */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-ko: var(--font-noto), var(--font-inter), sans-serif;
+
+  /* ---------- 폰트 크기 + 줄간격 (Figma px) ---------- */
+  --text-sm: 14px;
+  --text-sm--line-height: 20px;
+
+  --text-base: 16px;
+  --text-base--line-height: 24px;
+
+  --text-product: 20px;
+  --text-product--line-height: 32px;
+
+  --text-body-lg: 16px;
+  --text-body-lg--line-height: 24px;
+
+  --text-series: 40px;
+  --text-series--line-height: 60px;
+
+  --text-utility: 60px;
+  --text-utility--line-height: 70px;
+
+  /* 서브페이지 Login / Cart / Search (Figma: Inter Semi Bold 40 / 54) */
+  --text-utility-shop: 40px;
+  --text-utility-shop--line-height: 54px;
+
+  /* ---------- 폰트 굵기 ---------- */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ---------- 줄간격 비율 ---------- */
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-body: 1.6;
+  --leading-body-lg: 1.7;
+
+  /* ---------- letter-spacing ---------- */
+  --tracking-normal: 0em;
+  --tracking-wide: 0.02em;
+
+  /* ---------- 페이지 그리드 ---------- */
+  --spacing-page-x: 20px;
+  --spacing-page-y: 30px;
+  --spacing-gutter: 20px;
+  --grid-columns: 12;
+
+  /* ---------- 샵 상품 가로 열 (공통) ---------- */
+  --spacing-shop-strip-left: 60px; /* 왼쪽 여백 (공통) */
+  /* 왼쪽 카테고리 메뉴가 열릴 때 상품이 밀리는 거리 */
+  --shop-menu-shift: 360px;
+
+  /* ===== 일반 시리즈 (Stripe, The Hotel 등) — 여기만 조절 ===== */
+  --shop-default-gap: 16px; /* 상품 사이 간격 */
+  --shop-default-scale: 1.1; /* 크기 배율 */
+  --shop-default-visible-count: 5; /* 한 화면에 보이는 개수 기준 */
+  --shop-default-aspect: 1.35; /* 높이 = 너비 × 이 값 */
+  --shop-default-width: calc(
+    (
+        var(--frame-width) - var(--spacing-shop-strip-left) -
+          (var(--shop-default-visible-count) - 1) * var(--shop-default-gap) -
+          100px
+      ) / var(--shop-default-visible-count) * var(--shop-default-scale)
+  );
+  --shop-default-height: calc(
+    var(--shop-default-width) * var(--shop-default-aspect)
+  );
+
+  /* ===== 비치타월 — 여기만 조절 ===== */
+  --shop-beach-gap: 2px; /* 상품 사이 간격 */
+  --shop-beach-scale: 1; /* 크기 배율 */
+  --shop-beach-visible-count: 5; /* 한 화면에 보이는 개수 기준 */
+  --shop-beach-aspect: 1.9; /* 높이 = 너비 × 이 값 */
+  --shop-beach-width: calc(
+    (
+        var(--frame-width) - var(--spacing-shop-strip-left) -
+          (var(--shop-beach-visible-count) - 1) * var(--shop-beach-gap) -
+          100px
+      ) / var(--shop-beach-visible-count) * var(--shop-beach-scale)
+  );
+  --shop-beach-height: calc(
+    var(--shop-beach-width) * var(--shop-beach-aspect)
+  );
+
+  /* ---------- 섹션 간격 ---------- */
+  --spacing-section: -60px;
+
+  /* ---------- 자주 쓰는 간격 ---------- */
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+
+  /* ---------- 기준 프레임 (맥북 16인치 Figma: 1728×1117) ---------- */
+  --max-width-page: 1728px;
+  --frame-width: 1728px;
+  --frame-height: 1117px;
+
+  /* ---------- border radius ---------- */
+  --radius-none: 0;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+
+  /* ---------- 반응형 breakpoint ---------- */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+}
+
+:root {
+  --grid-columns: 12;
+  --spacing-page-x: 20px;
+  --spacing-page-y: 30px;
+  --spacing-gutter: 20px;
+  --frame-width: 1728px;
+  --frame-height: 1117px;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--text-base--line-height);
+  letter-spacing: var(--tracking-normal);
+}
+
+/* 상품 가로 스크롤 — 스크롤바 숨김 */
+.product-strip {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.product-strip::-webkit-scrollbar {
+  display: none;
+}
+
+/* 비치: 박스 꽉 채움 / 일반: 전체 보이게(잘림 없음) */
+.product-strip--beach .product-strip__image {
+  object-fit: cover;
+}
+
+.product-strip--default .product-strip__image {
+  object-fit: contain;
+}
+
+/* 상세 페이지 파란 프레임 바탕 (이미지 없이 CSS로) */
+.product-detail-frame {
+  background-color: var(--color-detail-bg);
+}
+
+/* 상세 페이지 이미지 스크롤 — 스크롤바 숨김 */
+.product-detail-gallery {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.product-detail-gallery::-webkit-scrollbar {
+  display: none;
+}
