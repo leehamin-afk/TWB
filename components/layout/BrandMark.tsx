@@ -9,10 +9,10 @@ import { usePathname } from "next/navigation";
  */
 export default function BrandMark() {
   const pathname = usePathname();
-  const isHome = pathname === "/";
-  const isDetail = pathname.includes("/product/");
+  // 메인(/) 또는 pathname 준비 전 → 표시 안 함
+  if (!pathname || pathname === "/") return null;
 
-  if (isHome) return null;
+  const isDetail = pathname.includes("/product/");
 
   return (
     <Link
