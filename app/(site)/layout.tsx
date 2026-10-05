@@ -1,4 +1,4 @@
-import HomeButton from "@/components/layout/HomeButton";
+import BrandMark from "@/components/layout/BrandMark";
 import UtilityNav from "@/components/layout/UtilityNav";
 
 /**
@@ -14,7 +14,7 @@ export default function SiteLayout({
     <>
       {children}
       <UtilityNav />
-      <HomeButton />
+      <BrandMark />
     </>
   );
 }

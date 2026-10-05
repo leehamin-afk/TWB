@@ -8,21 +8,28 @@ type CategoryNavProps = {
   activeId?: string;
   /** 호버 중인 카테고리 id (서브메뉴 표시용) */
   onHoverChange?: (categoryId: string | null) => void;
+  /** 파란 바탕 등에서 흰색으로 보이기 */
+  inverted?: boolean;
 };
 
 /**
  * 왼쪽 상단 카테고리 메뉴 (질감 텍스트 이미지)
- * 호버 시 서브 카테고리를 보여 주도록 onHoverChange를 호출합니다.
+ * 기본: 전부 블랙 / 호버·선택 시 나머지 opacity 20%
  */
 export default function CategoryNav({
   activeId,
   onHoverChange,
+  inverted = false,
 }: CategoryNavProps) {
+  const dimOthers = Boolean(activeId);
+
   return (
     <nav aria-label="Categories">
-      <ul className="flex flex-col items-start gap-[8px]">
+      <ul className="flex flex-col items-start gap-[var(--spacing-category-gap)]">
         {categories.map((item) => {
           const isActive = item.id === activeId;
+          const opacityClass =
+            !dimOthers || isActive ? "opacity-100" : "opacity-20";
 
           return (
             <li
@@ -33,16 +40,16 @@ export default function CategoryNav({
                 href={item.href}
                 aria-current={isActive ? "page" : undefined}
                 aria-label={item.label}
-                className={`block transition-opacity ${
-                  isActive ? "opacity-100" : "opacity-[0.28] hover:opacity-100"
-                }`}
+                className={`block transition-opacity duration-300 ${opacityClass}`}
               >
                 <Image
                   src={item.imageSrc}
                   alt={item.label}
                   width={item.imageWidth}
                   height={item.imageHeight}
-                  className="h-[44px] w-auto"
+                  className={`h-[var(--size-category-h)] w-auto transition-[filter] duration-300 ${
+                    inverted ? "brightness-0 invert" : ""
+                  }`}
                   priority={item.id === "towel"}
                 />
               </Link>

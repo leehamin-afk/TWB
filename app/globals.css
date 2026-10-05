@@ -38,14 +38,21 @@
   --text-product: 20px;
   --text-product--line-height: 32px;
 
+  /* 상품 호버 퀵뷰 */
+  --quickview-width: 447px;
+  --quickview-max-h: 370px;
+  --quickview-pad-x: 17px;
+  --quickview-pad-y: 20px;
+
   --text-body-lg: 16px;
   --text-body-lg--line-height: 24px;
 
   --text-series: 40px;
-  --text-series--line-height: 60px;
+  --text-series--line-height: 56px;
 
-  --text-utility: 60px;
-  --text-utility--line-height: 70px;
+  /* 메인 하단 Login / Cart / Search — 여기 숫자 바꾸면 됨 */
+  --text-utility: 55px;
+  --text-utility--line-height: 64px;
 
   /* 서브페이지 Login / Cart / Search (Figma: Inter Semi Bold 40 / 54) */
   --text-utility-shop: 40px;
@@ -70,8 +77,31 @@
   /* ---------- 페이지 그리드 ---------- */
   --spacing-page-x: 20px;
   --spacing-page-y: 30px;
+  --spacing-page-top: 24px; /* 상단 가터 */
   --spacing-gutter: 20px;
   --grid-columns: 12;
+
+  /* 1칼럼 너비 = (프레임 - 좌우마진 - 거터×11) / 12 */
+  --grid-col-width: calc(
+    (
+        var(--frame-width) - 2 * var(--spacing-page-x) -
+          (var(--grid-columns) - 1) * var(--spacing-gutter)
+      ) / var(--grid-columns)
+  );
+  /* 2칼럼 = 칼럼 2개 + 사이 거터 1개 */
+  --grid-span-2: calc(2 * var(--grid-col-width) + var(--spacing-gutter));
+
+  /* ---------- 카테고리 메뉴 (왼쪽 Towel / Robe …) ---------- */
+  /* 크기 조절: --size-category-scale 만 바꾸면 됨 (1 = 정확히 2칼럼, 0.9 = 조금 작게) */
+  /* 간격 조절: --spacing-category-gap */
+  --spacing-category-gap: 13px;
+  --size-category-scale: 0.9;
+  --size-category-max-w: calc(var(--grid-span-2) * var(--size-category-scale));
+  /* Journal(300×75) 기준으로 높이 산출 → 나머지는 같은 높이로 비율 유지 */
+  --size-category-h: calc(var(--size-category-max-w) * 75 / 300);
+
+  /* 메인 호버 상품 미리보기 */
+  --size-home-preview-max-h: 360px;
 
   /* ---------- 샵 상품 가로 열 (공통) ---------- */
   --spacing-shop-strip-left: 60px; /* 왼쪽 여백 (공통) */
@@ -139,6 +169,7 @@
   --grid-columns: 12;
   --spacing-page-x: 20px;
   --spacing-page-y: 30px;
+  --spacing-page-top: 24px;
   --spacing-gutter: 20px;
   --frame-width: 1728px;
   --frame-height: 1117px;
@@ -151,6 +182,19 @@ body {
   font-size: var(--text-base);
   line-height: var(--text-base--line-height);
   letter-spacing: var(--tracking-normal);
+  /* 단어 중간 끊김·하이픈 방지 */
+  hyphens: none;
+  -webkit-hyphens: none;
+  -ms-hyphens: none;
+  word-break: keep-all;
+  overflow-wrap: normal;
+}
+
+*,
+*::before,
+*::after {
+  hyphens: none;
+  -webkit-hyphens: none;
 }
 
 /* 상품 가로 스크롤 — 스크롤바 숨김 */
@@ -175,6 +219,53 @@ body {
 /* 상세 페이지 파란 프레임 바탕 (이미지 없이 CSS로) */
 .product-detail-frame {
   background-color: var(--color-detail-bg);
+}
+
+/* 상세: 상하 23 / 좌우 15, 7+5 칼럼 (갭 = 컬럼 거터) */
+.product-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--spacing-gutter);
+  height: 100%;
+  padding: 23px 15px;
+  box-sizing: border-box;
+  transition: padding-top 0.18s ease;
+}
+
+/* 기본: 이미지 1–7 / 설명 8–12 */
+.product-detail-grid > .product-detail-gallery {
+  grid-column: 1 / span 7;
+}
+
+.product-detail-grid > .product-detail-panel {
+  grid-column: 8 / span 5;
+}
+
+/* 카테고리 호버: 설명·갭 유지, 이미지만 3칼럼부터 (3–7) */
+.product-detail-grid.is-menu-open > .product-detail-gallery {
+  grid-column: 3 / span 5;
+}
+
+/* 시리즈 표시 시 두 박스 상단 마진 150px */
+.product-detail-grid.is-series-open {
+  padding-top: 150px;
+}
+
+.product-detail-panel {
+  padding: 58px 68px 58px;
+}
+
+/* 정보 영역보다 좌우 2px씩 긴 파란 스트로크 */
+.product-detail-stroke {
+  margin-top: 0;
+  margin-left: -2px;
+  width: calc(100% + 4px);
+  height: 1px;
+  background-color: var(--color-detail-bg);
+}
+
+.product-detail-info {
+  overflow: hidden;
 }
 
 /* 상세 페이지 이미지 스크롤 — 스크롤바 숨김 */

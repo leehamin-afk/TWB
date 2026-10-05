@@ -42,14 +42,24 @@ export default function ProductStrip({
     const el = listRef.current;
     if (!el) return;
 
+    // 배치는 좌우 유지.
+    // 상품 위뿐 아니라 여백·빈 영역에서 상하 스크롤해도 상품 열이 좌우로 이동
     const onWheel = (event: WheelEvent) => {
-      if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
-      el.scrollLeft += event.deltaY;
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      if (maxScroll <= 0) return;
+
+      const delta =
+        Math.abs(event.deltaY) >= Math.abs(event.deltaX)
+          ? event.deltaY
+          : event.deltaX;
+      if (delta === 0) return;
+
+      el.scrollLeft += delta;
       event.preventDefault();
     };
 
-    el.addEventListener("wheel", onWheel, { passive: false });
-    return () => el.removeEventListener("wheel", onWheel);
+    window.addEventListener("wheel", onWheel, { passive: false });
+    return () => window.removeEventListener("wheel", onWheel);
   }, []);
 
   useEffect(() => {
@@ -111,10 +121,10 @@ export default function ProductStrip({
   }
 
   return (
-    <div className="relative w-full">
+    <div className="relative flex h-full w-full items-center">
       <ul
         ref={listRef}
-        className={`product-strip flex items-center overflow-x-auto py-2 pl-[var(--spacing-shop-strip-left)] pr-[100px] ${
+        className={`product-strip flex w-full items-center overflow-x-auto overscroll-x-contain py-2 pl-[var(--spacing-shop-strip-left)] pr-[100px] ${
           isBeach ? "product-strip--beach" : "product-strip--default"
         }`}
         style={{

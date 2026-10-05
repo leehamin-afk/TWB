@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { Product } from "@/lib/types";
 
 type ProductDetailInfoProps = {
@@ -8,11 +8,11 @@ type ProductDetailInfoProps = {
 };
 
 /**
- * 상세 페이지 오른쪽 정보 (Figma)
- * 제목 → 컬러 → Price / 수량 → Detail 설명·스펙·케어
+ * 상세 페이지 오른쪽 정보 패널
  */
 export default function ProductDetailInfo({ product }: ProductDetailInfoProps) {
   const [qty, setQty] = useState(1);
+
   const careLines = product.care
     ? product.care
         .split(/\n+/)
@@ -20,73 +20,98 @@ export default function ProductDetailInfo({ product }: ProductDetailInfoProps) {
         .filter(Boolean)
     : [];
 
+  /** 자릿수가 늘면 - N + 사이 갭만 줄임 (왼쪽 끝·N 중앙 유지) */
+  const qtyGap = useMemo(() => {
+    const digits = String(qty).length;
+    if (digits <= 1) return 25;
+    return Math.max(6, 25 - (digits - 1) * 7);
+  }, [qty]);
+
+  const qtySlotCh = useMemo(() => {
+    const digits = String(qty).length;
+    return Math.max(1, digits);
+  }, [qty]);
+
   return (
-    <div className="flex flex-col">
-      <h1 className="text-product font-semibold uppercase tracking-normal text-foreground">
-        {product.name}
-      </h1>
-
-      {product.color ? (
-        <p className="mt-sm text-base font-normal uppercase tracking-normal text-muted">
-          {product.color}
-        </p>
-      ) : null}
-
-      <div className="mt-lg flex items-center gap-md text-base">
-        <span>Price</span>
-        {product.price > 0 ? (
-          <span className="font-medium">
-            ₩{product.price.toLocaleString("ko-KR")}
-          </span>
+    <div className="product-detail-info flex h-full min-h-0 flex-col">
+      <div>
+        <h1 className="text-[28px] font-medium leading-[38px] text-foreground">
+          {product.name}
+        </h1>
+        {product.color ? (
+          <p className="text-[16px] font-medium leading-[38px] text-[#ABABAB]">
+            {product.color}
+          </p>
         ) : null}
-
-        <div className="ml-auto flex items-center gap-sm" aria-label="수량">
-          <button
-            type="button"
-            className="px-1"
-            onClick={() => setQty((n) => Math.max(1, n - 1))}
-            aria-label="수량 감소"
-          >
-            -
-          </button>
-          <span>{qty}</span>
-          <button
-            type="button"
-            className="px-1"
-            onClick={() => setQty((n) => n + 1)}
-            aria-label="수량 증가"
-          >
-            +
-          </button>
-        </div>
       </div>
 
-      <div className="mt-md border-t border-detail-bg/35 pt-md">
-        <dl className="grid grid-cols-[72px_1fr] gap-x-md text-base">
-          <dt className="text-foreground">Detail</dt>
-          <dd className="min-w-0">
-            {product.description ? (
-              <p className="font-ko leading-body text-foreground">
-                {product.description}
-              </p>
-            ) : null}
+      <div className="mt-[40px]">
+        <div className="flex items-center text-[16px] font-medium leading-[26px] text-foreground">
+          <span>Price</span>
+          <span className="ml-[86px]">
+            {product.price > 0
+              ? `₩${product.price.toLocaleString("ko-KR")}`
+              : ""}
+          </span>
 
-            <ul className="mt-md space-y-sm uppercase tracking-normal">
-              {product.material ? (
-                <li>MATERIAL: {product.material}</li>
-              ) : null}
-              {product.size ? <li>SIZE: {product.size}</li> : null}
-            </ul>
+          <div
+            className="ml-[282px] flex shrink-0 items-center"
+            style={{ gap: qtyGap }}
+            aria-label="수량"
+          >
+            <button
+              type="button"
+              onClick={() => setQty((n) => Math.max(1, n - 1))}
+              aria-label="수량 감소"
+            >
+              -
+            </button>
+            <span
+              className="inline-block text-center"
+              style={{ width: `${qtySlotCh}ch`, minWidth: "1ch" }}
+            >
+              {qty}
+            </span>
+            <button
+              type="button"
+              onClick={() => setQty((n) => n + 1)}
+              aria-label="수량 증가"
+            >
+              +
+            </button>
+          </div>
+        </div>
 
-            {careLines.length > 0 ? (
-              <div className="mt-md space-y-sm font-ko text-sm leading-body text-muted">
-                {careLines.map((line) => (
-                  <p key={line}>{line}</p>
-                ))}
-              </div>
-            ) : null}
-          </dd>
-        </dl>
+        {/* Price ↔ 스트로크 14px / 스트로크는 텍스트 박스보다 좌우 2px 김 */}
+        <div
+          className="product-detail-stroke mt-[14px]"
+          aria-hidden="true"
+        />
+      </div>
+
+      <div className="mt-[14px] grid grid-cols-[auto_1fr] gap-x-[86px] text-[16px] font-medium leading-[26px] text-foreground">
+        <span>Detail</span>
+        <div className="min-w-0">
+          {product.description ? (
+            <p className="font-ko text-[16px] font-medium leading-[1.75] text-foreground">
+              {product.description}
+            </p>
+          ) : null}
+
+          <ul className="mt-[14px] space-y-0 text-[16px] font-medium leading-[26px] text-foreground">
+            {product.material ? <li>{product.material}</li> : null}
+            {product.size ? <li>{product.size}</li> : null}
+            {product.weight ? <li>{product.weight}</li> : null}
+          </ul>
+
+          {careLines.length > 0 ? (
+            <div className="mt-[14px] space-y-0 font-ko text-[16px] font-medium leading-[1.75] text-foreground">
+              {careLines.map((line) => (
+                <p key={line}>{line}</p>
+              ))}
+            </div>
+          ) : null}
+        </div>
       </div>
     </div>
   );

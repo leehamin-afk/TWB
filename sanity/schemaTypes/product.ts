@@ -55,6 +55,11 @@ export const product = defineType({
       type: "string",
     }),
     defineField({
+      name: "weight",
+      title: "무게",
+      type: "string",
+    }),
+    defineField({
       name: "image",
       title: "대표 이미지 (목록용)",
       type: "image",

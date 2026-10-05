@@ -3,7 +3,8 @@
  * 여백/거터 값은 app/globals.css 토큰을 사용합니다. (px)
  *
  * - 좌우 마진: --spacing-page-x (20px)
- * - 상하 마진: --spacing-page-y (30px)
+ * - 상단 마진: --spacing-page-top (24px)
+ * - 하단 마진: --spacing-page-y (30px)
  * - gutter: --spacing-gutter (20px)
  * - 컬럼: --grid-columns (12)
  * - 기준 프레임: --frame-width × --frame-height (1728 × 1117)
@@ -16,7 +17,7 @@
   row-gap: var(--spacing-gutter);
   padding-left: var(--spacing-page-x);
   padding-right: var(--spacing-page-x);
-  padding-top: var(--spacing-page-y);
+  padding-top: var(--spacing-page-top);
   padding-bottom: var(--spacing-page-y);
   width: 100%;
   max-width: var(--frame-width, 1728px);
@@ -32,8 +33,8 @@
   height: 100%;
 }
 
-/* 상세: 상단은 다른 페이지와 동일(30), 좌우·하단 20 */
+/* 상세: 상단은 다른 페이지와 동일(24), 좌우·하단 20 */
 .page-grid--detail {
-  padding-top: var(--spacing-page-y);
+  padding-top: var(--spacing-page-top);
   padding-bottom: var(--spacing-page-x);
 }

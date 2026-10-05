@@ -1,9 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 
 type WipeDraggableProps = {
-  children: ReactNode;
+  children: ReactNode | ((ctx: { isDragging: boolean }) => ReactNode);
   className?: string;
   /** 부모(relative) 기준 초기 위치 */
   initial: { left: number; bottom: number };
@@ -30,6 +36,7 @@ export default function WipeDraggable({
   const ref = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
   const grab = useRef({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
   const [pos, setPos] = useState<Pos>({
     left: initial.left,
     bottom: initial.bottom,
@@ -39,14 +46,7 @@ export default function WipeDraggable({
   useEffect(() => {
     setPos({ left: initial.left, bottom: initial.bottom });
     setReady(true);
-
-    requestAnimationFrame(() => {
-      const el = ref.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      onWipe(rect.left + rect.width / 2, rect.top + rect.height / 2, wipeRadius);
-    });
-  }, [initial.bottom, initial.left, onWipe, wipeRadius]);
+  }, [initial.bottom, initial.left]);
 
   const wipeFromElement = useCallback(() => {
     const el = ref.current;
@@ -63,6 +63,7 @@ export default function WipeDraggable({
     const elRect = event.currentTarget.getBoundingClientRect();
 
     dragging.current = true;
+    setIsDragging(true);
     grab.current = {
       x: event.clientX - elRect.left,
       y: event.clientY - elRect.top,
@@ -91,6 +92,7 @@ export default function WipeDraggable({
   const onPointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
     if (!dragging.current) return;
     dragging.current = false;
+    setIsDragging(false);
 
     const parent = ref.current?.offsetParent as HTMLElement | null;
     const el = event.currentTarget;
@@ -109,7 +111,7 @@ export default function WipeDraggable({
       role="button"
       tabIndex={0}
       aria-label={ariaLabel}
-      className={`wipe-tool absolute z-30 ${className}`.trim()}
+      className={`wipe-tool absolute z-30 ${isDragging ? "is-dragging" : ""} ${className}`.trim()}
       style={{
         left: pos.left,
         ...(pos.bottom !== undefined
@@ -122,7 +124,7 @@ export default function WipeDraggable({
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
     >
-      {children}
+      {typeof children === "function" ? children({ isDragging }) : children}
     </div>
   );
 }

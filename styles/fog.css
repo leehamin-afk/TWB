@@ -1,17 +1,17 @@
 /**
  * 김서림(포그) 레이어 전용 스타일
- * 기본 레이아웃과 분리해 두었습니다.
+ * 영상은 원본 유지, 포그 캔버스에만 효과
  */
 
-.fog-layer {
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+.fog-video {
+  /* 원본 영상 — 블러 없음 */
 }
 
 .fog-canvas {
   touch-action: none;
   pointer-events: none;
+  /* 김 가장자리를 부드럽게 */
+  filter: blur(4px);
 }
 
 .wipe-tool {

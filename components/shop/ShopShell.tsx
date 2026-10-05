@@ -57,7 +57,7 @@ export default function ShopShell({
       >
         {/* 상단 메뉴 영역 — absolute라 상품 높이에 영향 없음 */}
         <div
-          className="absolute inset-x-0 top-0 z-30 px-page-x pt-page-y"
+          className="absolute inset-x-0 top-0 z-30 px-page-x pt-[var(--spacing-page-top)]"
           onMouseLeave={() => {
             setTopHover(false);
             setMenuOpen(false);
@@ -90,7 +90,7 @@ export default function ShopShell({
                     alt={category.label}
                     width={category.imageWidth}
                     height={category.imageHeight}
-                    className="h-[44px] w-auto"
+                    className="h-[var(--size-category-h)] w-auto"
                     priority
                   />
                 </Link>

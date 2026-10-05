@@ -15,6 +15,7 @@ export type Product = {
   gallery?: string[];
   size?: string;
   material?: string;
+  weight?: string;
   category?: string;
   series?: string;
 };

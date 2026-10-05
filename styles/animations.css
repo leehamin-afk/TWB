@@ -47,3 +47,73 @@
 .shop-products.is-shifted {
   transform: translateX(var(--shop-menu-shift));
 }
+
+/* 상세: 이미지 밀림은 grid-column으로 즉시 반영 (복귀 지연 제거) */
+
+/* 메인: About ↔ 호버 상품 미리보기 (0.3초) */
+.home-spot-layer {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  will-change: opacity;
+}
+
+/* About 수건 — 호버/3초마다 5px 두 번 튕김 (드래그 중에는 중지) */
+.about-towel-bounce {
+  will-change: transform;
+}
+
+.about-towel-bounce.is-bouncing {
+  animation: about-towel-bounce 0.96s ease-in-out 1;
+}
+
+.wipe-tool.is-dragging .about-towel-bounce {
+  animation: none !important;
+  transform: none !important;
+}
+
+@keyframes about-towel-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  18% {
+    transform: translateY(-5px);
+  }
+  36% {
+    transform: translateY(0);
+  }
+  54% {
+    transform: translateY(-5px);
+  }
+  72% {
+    transform: translateY(0);
+  }
+}
+
+/* About 문구 스트로크 한 단계 */
+.about-towel-text {
+  -webkit-text-stroke: 0.6px rgba(255, 255, 255, 0.55);
+  paint-order: stroke fill;
+  text-shadow:
+    0 0 0.5px rgba(0, 60, 140, 0.35),
+    0 1px 1px rgba(0, 40, 100, 0.2);
+}
+
+/* 퀵뷰: 설명 말줄임 (가변 높이 안에서) */
+.quickview-details {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: keep-all;
+}
+
+.home-spot-layer.is-visible {
+  opacity: 1;
+}
+
+.home-spot-layer.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}

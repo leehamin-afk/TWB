@@ -6,8 +6,8 @@ import { utilityNav } from "@/data/site";
 
 /**
  * 오른쪽 아래 Login / Cart / Search
- * - 메인: Inter Semi Bold 60 / 70
- * - 서브: Inter Semi Bold 40 / 54
+ * - 메인: Inter Semi Bold (--text-utility in globals.css)
+ * - 서브: Inter Semi Bold (--text-utility-shop in globals.css)
  */
 export default function UtilityNav() {
   const pathname = usePathname();

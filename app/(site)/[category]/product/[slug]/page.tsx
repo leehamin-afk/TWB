@@ -1,6 +1,10 @@
 import { notFound } from "next/navigation";
 import ProductDetailLayout from "@/components/shop/ProductDetailLayout";
-import { categorySlugs, getCategoryBySlug } from "@/lib/catalog";
+import {
+  categorySlugs,
+  getCategoryBySlug,
+  getSeriesForCategory,
+} from "@/lib/catalog";
 import { getProductBySlug, getProducts } from "@/lib/sanity/products";
 
 type PageProps = {
@@ -30,6 +34,14 @@ export default async function CategoryProductPage({ params }: PageProps) {
   const extra =
     product.gallery?.filter((src) => src && src !== product.image) ?? [];
   const gallery = [product.image, ...extra];
+  const seriesItems = getSeriesForCategory(categorySlug);
 
-  return <ProductDetailLayout product={product} gallery={gallery} />;
+  return (
+    <ProductDetailLayout
+      product={product}
+      gallery={gallery}
+      categoryId={categorySlug}
+      seriesItems={seriesItems}
+    />
+  );
 }

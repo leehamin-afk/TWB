@@ -22,6 +22,7 @@ type SanityProduct = {
   care?: string;
   size?: string;
   material?: string;
+  weight?: string;
   image?: SanityImage;
   gallery?: SanityImage[];
   category?: string;
@@ -49,6 +50,7 @@ function mapSanityProduct(item: SanityProduct): Product {
     care: item.care,
     size: item.size,
     material: item.material,
+    weight: item.weight,
     image: imageUrl(item.image),
     gallery: gallery.length ? gallery : undefined,
     category: item.category,
